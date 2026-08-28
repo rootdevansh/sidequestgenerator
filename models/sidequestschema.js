@@ -12,7 +12,11 @@ const sidequestschema=new mongoose.Schema({
     createdat:{
         type:Date,
         default:Date.now,
-    }
+    },
+    writtenByWanderer:{
+        type:Boolean,
+        default:false
+    },
 });
 
 module.exports=mongoose.model("sidequest",sidequestschema);

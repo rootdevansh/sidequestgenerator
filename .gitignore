@@ -1,2 +1,3 @@
 # Secret keys and local configuration
+node_modules/
 .env
