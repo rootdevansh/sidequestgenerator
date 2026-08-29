@@ -2,6 +2,7 @@ const express=require("express");
 const router=express.Router();
 router.use(express.json());
 const {sidequest}=require('../models/sidequestschema');
+const verifytoken=require('../middleware/authmiddleware');
 
 const {generatesidequest}=require('../services/geminiservice');
 
@@ -53,7 +54,7 @@ router.get('/sidequest',async(req,res)=>{
     }
 });
 
-router.delete('/sidequest/:id',async(req,res)=>{
+router.delete('/sidequest/:id',verifytoken,async(req,res)=>{
     try{
         const deletedquest=await sidequest.findByIdAndDelete(req.params.id);
     
@@ -66,7 +67,7 @@ router.delete('/sidequest/:id',async(req,res)=>{
 }
 });
 
-router.put('/sidequest/:id',async(req,res)=>{
+router.put('/sidequest/:id',verifytoken,async(req,res)=>{
     const {text}=req.body;
     if(!text||text.trim().length===0){
         return res.status(400).json({message:"The wanderer Must be willing to rewrite the journey in order to Defy fate.. "});
