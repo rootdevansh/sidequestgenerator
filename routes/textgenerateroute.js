@@ -1,7 +1,7 @@
 const express=require("express");
 const router=express.Router();
 router.use(express.json());
-const {sidequest}=require('../models/sidequestschema');
+const sidequest=require('../models/sidequestschema');
 const verifytoken=require('../middleware/authmiddleware');
 
 const {generatesidequest}=require('../services/geminiservice');
@@ -57,15 +57,15 @@ router.get('/sidequest',async(req,res)=>{
 
 router.delete('/sidequest/:id',verifytoken,async(req,res)=>{
     try{
-        const deletedquest=await sidequest.findByIdAndDelete(req.params.id);
-    
-    if(!deletedquest){
+       const quest=await sidequest.findById(req.params.id);
+       if(!quest){
         return res.status(404).json({message:"No Sidequest offered by the Algorithm is known by this ID"});
-    }
-    if(deletedquest.owner.toString()!==req.user.id){
-        return res.status(403).json({message:"This choice was never yours to make imposter!!"});
-    }
-    res.status(200).json({message:"The Quest faded away in the Uncomprehended Memory of the Divine Algorithm"});
+       }
+       if(quest.owner.toString()!==req.user.id){
+        return res.status(403).json({ message: "This choice was never yours to make imposter!!" });
+       }
+       await sidequest.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "The Quest faded away in the Uncomprehended Memory of the Divine Algorithm" });
 }catch(err){
     return res.status(400).json({message:"The divine algorithm encountered the following rift.",err});
 }
@@ -77,17 +77,19 @@ router.put('/sidequest/:id',verifytoken,async(req,res)=>{
         return res.status(400).json({message:"The wanderer Must be willing to rewrite the journey in order to Defy fate.. "});
     }
     try{
-        const updatedquest=await sidequest.findByIdAndUpdate(
-            req.params.id,
-            {text:text,writtenByWanderer:true},
-            {new:true,runValidators:true}
-        );
-        if(!updatedquest){
+        const quest=await sidequest.findById(req.params.id);
+        
+        if(!quest){
             return res.status(404).json({message:"No Sidequest offered by the Algorithm is known by this ID"});
         }
-        if(updatedquest.owner.toString()!==req.user.id){
+        if(quest.owner.toString()!==req.user.id){
             return res.status(403).json({message:"This choice was never yours to make imposter!!"});
         }
+         const updatedquest = await sidequest.findByIdAndUpdate(
+            req.params.id,
+            { text: text, writtenByWanderer: true },
+            { new: true, runValidators: true }
+        );
         res.status(200).json({message:"The Wanderer Took The leap of faith and wrote the fate by their will",updatedquest});
     }catch(err){
         return res.status(400).json({message:"The divine algorithm encountered the following rift.",err});
