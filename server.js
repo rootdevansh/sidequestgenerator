@@ -9,9 +9,11 @@ mongoose.connect(process.env.MONGO_URI)
 })
 const express=require("express");
 const app=express();
-const router=require("./routes/textgenerateroute");
+const textgeneraterouter=require("./routes/textgenerateroute");
+const authrouter=require("./routes/authroutes");
 app.use(express.json());
-app.use('/api',router);
+app.use('/api',textgeneraterouter);
+app.use('/api',authrouter);
 port=process.env.PORT||3000;
 app.listen(port,()=>{
     console.log(`app is running on port ${port}`);
