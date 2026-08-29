@@ -17,6 +17,10 @@ const sidequestschema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+    }
 });
 
 module.exports=mongoose.model("sidequest",sidequestschema);

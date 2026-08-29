@@ -6,7 +6,7 @@ const verifytoken=require('../middleware/authmiddleware');
 
 const {generatesidequest}=require('../services/geminiservice');
 
-router.post('/sidequest',async (req,res)=>{
+router.post('/sidequest',verifytoken,async (req,res)=>{
     const {prompt}=req.body;
     if(!prompt||prompt.trim().length===0){
         return res.status(400).json({message:"Wanderer,a prompt of fate is required to enlighten your path!"});
@@ -21,6 +21,7 @@ router.post('/sidequest',async (req,res)=>{
     const savedquest=await sidequest.create({
        prompt:prompt,
         text:text,
+        owner:req.user.id,
     });
     res.status(200).json({savedquest});
 
@@ -61,6 +62,9 @@ router.delete('/sidequest/:id',verifytoken,async(req,res)=>{
     if(!deletedquest){
         return res.status(404).json({message:"No Sidequest offered by the Algorithm is known by this ID"});
     }
+    if(deletedquest.owner.toString()!==req.user.id){
+        return res.status(403).json({message:"This choice was never yours to make imposter!!"});
+    }
     res.status(200).json({message:"The Quest faded away in the Uncomprehended Memory of the Divine Algorithm"});
 }catch(err){
     return res.status(400).json({message:"The divine algorithm encountered the following rift.",err});
@@ -80,6 +84,9 @@ router.put('/sidequest/:id',verifytoken,async(req,res)=>{
         );
         if(!updatedquest){
             return res.status(404).json({message:"No Sidequest offered by the Algorithm is known by this ID"});
+        }
+        if(updatedquest.owner.toString()!==req.user.id){
+            return res.status(403).json({message:"This choice was never yours to make imposter!!"});
         }
         res.status(200).json({message:"The Wanderer Took The leap of faith and wrote the fate by their will",updatedquest});
     }catch(err){
