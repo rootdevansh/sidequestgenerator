@@ -80,3 +80,18 @@ PORT=3000
 
 
 🔗 [Live Demo](https://sidequestgenerator-przd.onrender.com)
+
+> ⚠️ **Note on the live demo:** This project is hosted on Render's free tier, so the server "sleeps" after periods of inactivity. The first request after a while may take 10–30 seconds to respond while it wakes up — this is expected, not a bug. Subsequent requests will be fast.
+>
+> This is also a personal learning project running on a free Gemini API tier. Quest generation is rate-limited (10 requests per 15 minutes per user) to keep it available for everyone testing it out.
+
+
+---
+
+## A Note from the Wanderer Who Built This
+
+I started this project to learn backend dev through hands-on practice, and honestly, nothing excites me more than a good story — which gave birth to this Divine Algorithm theme. A wanderer choosing their own path is a concept that came straight from the heart. I believe destiny is something we, as people, decide for ourselves; pre-written fate is something I despise.
+
+My mentor once told me that if we're breathing, there is hope to take our life in the direction we want. This project is a testament to myself that goals can be achieved even when motivation runs low — because in the end, values and discipline matter more.
+
+So, keep wandering, wanderer. Life is your choice to make. ⚔️✨
