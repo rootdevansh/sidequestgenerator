@@ -6,7 +6,16 @@ const verifytoken=require('../middleware/authmiddleware');
 
 const {generatesidequest}=require('../services/geminiservice');
 
-router.post('/sidequest',verifytoken,async (req,res)=>{
+const ratelimit=require('express-rate-limit');
+const questlimit=ratelimit({
+    windowMs:15*60*1000,
+    max:10,
+    message:{
+        message:"Too Many Requests at a time,Algorithm needs you to rest for 15 mins and come back later...",
+    }
+});
+
+router.post('/sidequest',verifytoken,questlimit,async (req,res)=>{
     const {prompt}=req.body;
     if(!prompt||prompt.trim().length===0){
         return res.status(400).json({message:"Wanderer,a prompt of fate is required to enlighten your path!"});
